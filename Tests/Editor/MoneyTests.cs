@@ -52,7 +52,29 @@ namespace Kalendra.Idle.Tests.Editor
         {
             var sut = Money.From(source);
 
-            (sut + sut).Should().Be(sut * 2);
+            var result = sut + sut;
+            
+            result.Should().Be(sut * 2);
+        }
+        
+        [Theory, TestCase(0), TestCase(2), TestCase(5)]
+        public void Money_MultiplyByZero_IsZero(double source)
+        {
+            var sut = Money.From(source);
+
+            var result = sut * 0;
+            
+            result.Should().Be(Money.Zero);
+        }
+        
+        [Theory, TestCase(0), TestCase(2), TestCase(5)]
+        public void MoneyZero_MultiplyByAnything_IsZero(double factor)
+        {
+            var sut = Money.Zero;
+
+            var result = sut * factor;
+            
+            result.Should().Be(Money.Zero);
         }
     }
 }

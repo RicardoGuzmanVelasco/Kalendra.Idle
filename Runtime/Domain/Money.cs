@@ -14,10 +14,14 @@ namespace Kalendra.Idle.Runtime
             return value;
         }
 
+        #region Factory Methods/Properties
         public static Money From(double reduction)
         {
             return new Money((int)reduction);
         }
+
+        public static Money Zero => From(0);
+        #endregion
 
         #region Operator overloading
         public static Money operator +(Money m1, Money m2)

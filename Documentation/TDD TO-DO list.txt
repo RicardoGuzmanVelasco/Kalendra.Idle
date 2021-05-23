@@ -1,6 +1,6 @@
 [x] Money is value object
 [x] Money is struct
-[-] Money.Zero
+[x] Money.Zero
 [ ] Money.ToString()
 
 [x] Money{1} <-> 1.0
@@ -9,7 +9,8 @@
 [ ] Money{1k} + Money{400} == Money{1k + 400}
 [ ] Money{1k} + Money{400} <-> 1400.0
 
-[-] Money{x} * 0 == Money{0} 
+[x] Money{x} * 0 == Money{0} 
+[x] Money{0} * x == Money{0}
 [x] Money{5} * 2 == Money{10}
 [x] Money{1} + Money{2} == Money{3}
 [x] Money{x} + Money{x} <-> Money{x} * 2
