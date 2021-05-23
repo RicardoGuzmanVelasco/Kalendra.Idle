@@ -7,6 +7,9 @@ namespace Kalendra.Idle.Runtime
     public readonly struct Money : IEquatable<Money>
     {
         readonly Dictionary<string, int> factors;
+
+        #region Constructors
+        Money(int amount, string prefixSymbol) : this(Prefix.From(prefixSymbol) * amount) { }
         
         Money(double amount)
         {
@@ -16,7 +19,7 @@ namespace Kalendra.Idle.Runtime
             factors = new Dictionary<string, int>();
             Factorize(amount);
         }
-
+        
         void Factorize(double amount)
         {
             if(amount < 1)
@@ -28,6 +31,7 @@ namespace Kalendra.Idle.Runtime
             
             Factorize(amount - closestPrefix * factor);
         }
+        #endregion
 
         public double Reduce()
         {
@@ -37,10 +41,22 @@ namespace Kalendra.Idle.Runtime
             return factors.Sum(factor => factor.Value * Prefix.From(factor.Key));
         }
 
+        public IReadOnlyCollection<Money> Factorize()
+        {
+            var resultFactors = new List<Money>();
+
+            foreach(var factor in factors)
+                resultFactors.Add(From(factor.Value, factor.Key));
+
+            return resultFactors;
+        }
+
         #region Factory Methods/Properties
         public static Money Zero => From(0);
         
         public static Money From(double reduction) => new Money(reduction);
+
+        public static Money From(int amount, string symbol) => new Money(amount, symbol);
         #endregion
 
         #region Operator overloading

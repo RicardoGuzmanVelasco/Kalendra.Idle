@@ -45,9 +45,9 @@
 [x] Money{1} + Money{2} == Money{3}
 [x] Money{x} + Money{x} <-> Money{x} * 2
 [x] Money{1k + 400} * 2 <-> Money{1k} * 2 + Money{400} * 2 == Money{2k + 800}
- 
 [x] Money{1k + 600} * 2 == Money{3k + 200}
-[ ] Factorization
-[ ] Money{1k + 600} * 2 != Money{2k + 1200}
+ 
+[x] Money{1k}.Factor() == [Money{1k}]
+[x] Money{20M + 2k}.Factor() == [Money{20M}, Money{2k}]
 
-[ ] Roundings
+[-] Roundings

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using Kalendra.Idle.Runtime;
 using NUnit.Framework;
@@ -196,6 +197,29 @@ namespace Kalendra.Idle.Tests.Editor
             var result = sut == Money.From(1400);
 
             result.Should().BeTrue();
+        }
+        #endregion
+        
+        #region Factorization
+        [Test, TestCase(1), TestCase(2e3), TestCase(20e12)]
+        public void Factorize_OneFactorMoney_IsSameMoney(double m)
+        {
+            var sut = Money.From(m);
+
+            var result = sut.Factorize();
+
+            result.Single().Should().Be(sut);
+        }
+
+        [Test]
+        public void Factorize_ResultSum_IsSameMoney()
+        {
+            var sut = Money.From(2135403541);
+
+            var sum = sut.Factorize().Sum(money => money.Reduce());
+            var result = Money.From(sum);
+
+            result.Should().Be(sut);
         }
         #endregion
     }
