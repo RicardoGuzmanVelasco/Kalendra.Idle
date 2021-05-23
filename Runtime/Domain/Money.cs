@@ -8,23 +8,23 @@ namespace Kalendra.Idle.Runtime
     public readonly struct Money : IEquatable<Money>
     {
         readonly Dictionary<string, int> factors;
-        public IReadOnlyDictionary<string, int> Factors => factors;
         
         Money(double amount)
         {
             factors = new Dictionary<string, int>();
-            Factor(amount);
+            Factorize(amount);
         }
 
-        void Factor(double amount)
+        void Factorize(double amount)
         {
             if(amount < 1)
                 return;
             
-            var closestPrefix = Prefixes.ClosestLowerThan(amount);
-            factors[closestPrefix] = Prefixes.ToUnits(amount, closestPrefix);
+            var closestPrefix = Prefix.ClosestLowerThan(amount);
+            var factor = (int) (amount / closestPrefix);
+            factors[closestPrefix] = factor;
             
-            Factor(amount - Reduce());
+            Factorize(amount - closestPrefix * factor);
         }
 
         public double Reduce()
@@ -32,7 +32,7 @@ namespace Kalendra.Idle.Runtime
             if(!factors.Any())
                 return 0;
 
-            return factors.Sum(factor => Prefixes.ToNumber(factor.Key) * factor.Value);
+            return factors.Sum(factor => factor.Value * Prefix.From(factor.Key));
         }
 
         #region Factory Methods/Properties
@@ -67,50 +67,70 @@ namespace Kalendra.Idle.Runtime
         #endregion
 
         #region Prefixes management
-        static class Prefixes
+        readonly struct Prefix
         {
-            static IEnumerable<string> OrderedPrefixes
+            readonly string symbol;
+            readonly int base10;
+
+            Prefix(string symbol)
             {
-                get
-                {
-                    yield return "";
-                    yield return "k";
-                    yield return "M";
-                    yield return "B";
-                    yield return "T";
-                    yield return "aa";
-                    yield return "ab";
-                    yield return "ac";
-                    yield return "ad";
-                }
+                Debug.Assert(Symbols.Contains(symbol));
+                
+                this.symbol = symbol;
+                
+                var prefixes = Symbols.TakeWhile(p => p != symbol);
+                base10 = prefixes.Count() * 3;
             }
             
-            internal static string ClosestLowerThan(double number)
+            #region Factory methods
+            public static Prefix From(string symbol) => new Prefix(symbol);
+
+            public static Prefix ClosestLowerThan(double number)
             {
                 var lastPrefix = "";
-                foreach(var prefix in OrderedPrefixes)
-                    if(ToNumber(prefix) > number)
-                        return lastPrefix;
+                foreach(var symbol in Symbols)
+                    if(Prefix.From(symbol) > number)
+                        return Prefix.From(lastPrefix);
                     else
-                        lastPrefix = prefix;
+                        lastPrefix = symbol;
 
                 throw new ArgumentOutOfRangeException();
             }
+            #endregion
 
-            internal static int ToUnits(double amount, string prefix)
-            {
-                Debug.Assert(amount / ToNumber(prefix) <= int.MaxValue);
+            #region Conversion operators
+            public static implicit operator double(Prefix p) => Math.Pow(10, p.base10);
+            public static implicit operator string(Prefix p) => p.symbol;
+            #endregion
 
-                return (int) (amount / ToNumber(prefix));
-            }
+            #region Equality
+            public bool Equals(Prefix other) => symbol == other.symbol;
+            public override bool Equals(object other) => other is Prefix o && Equals(o);
+            public override int GetHashCode() => symbol != null ? symbol.GetHashCode() : 0;
+            
+            public static bool operator ==(Prefix p1, Prefix p2) => p1.Equals(p2);
+            public static bool operator !=(Prefix p1, Prefix p2) => !(p1 == p2);
+            #endregion
 
-            internal static double ToNumber(string prefix)
-            {
-                Debug.Assert(OrderedPrefixes.Contains(prefix));
+            #region Formatting members
+            public override string ToString() => symbol;
+            #endregion
 
-                var prefixes = OrderedPrefixes.TakeWhile(p => p != prefix);
-                return Math.Pow(10, prefixes.Count() * 3);
-            }
+            static IEnumerable<string> Symbols
+                {
+                    get
+                    {
+                        yield return "";
+                        yield return "k";
+                        yield return "M";
+                        yield return "B";
+                        yield return "T";
+                        yield return "aa";
+                        yield return "ab";
+                        yield return "ac";
+                        yield return "ad";
+                    }
+                }
         }
         #endregion
     }

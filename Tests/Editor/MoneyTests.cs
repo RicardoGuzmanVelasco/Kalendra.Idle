@@ -6,7 +6,7 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
-        [Theory, TestCase(0), TestCase(1500)]
+        [Theory, TestCase(0), TestCase(50 + 20000 + 2e10)]
         public void Money_Reduces_ToDouble(double source)
         {
             var sut = Money.From(source);

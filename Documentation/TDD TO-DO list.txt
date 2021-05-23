@@ -45,3 +45,6 @@
  
 [ ] Money{1k + 600} * 2 != Money{2k + 1200}
 [ ] Money{1k + 600} * 2 == Money{3k + 200}
+
+[ ] Roundings
+[ ] Factorization
