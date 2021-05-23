@@ -4,8 +4,14 @@
 [x] Money private constructor
 [x] Money ignore decimals
 [x] Money factors are private
-[ ] Money has never negative factors
+[x] Money has never negative factors
+
 [ ] Money creates factors on the fly
+[ ] Money.From(double.MaxValue) does not fail
+
+[ ] Money{1k}.MaxPrefix == "k"
+[ ] Money{999}.MaxPrefix == ""
+[ ] Money{1B + 1k}.MaxPrefix == "B"
 
 [ ] Money{1k}.ToString() == "1k"
 [ ] Money{1k + 400}.ToString() == "1.4k"
@@ -17,20 +23,17 @@
 [ ] Money{100k + 500}.ToString() == Money{100k}.ToString()
 [ ] Money.From("10k") == Money{10k}
 
-[x] Money.From(1500) == 1500
-
 [x] Money{1} <-> 1.0
-
-[ ] Money.From(double.MaxValue) does not fail
-
 [x] Money{1} == Money{1}    (equality operator)
 [x] Money{0} == Money.Zero  (equality operator)
  
-[ ] Money{1k + 400} == 1400d
-[ ] Money{1k} + Money{400} == Money{1k + 400}
-[ ] Money{1k} + Money{400} <-> 1400.0
+[x] Money.From(1500) == 1500
+[x] Money{1k + 400} == 1400d
+[x] Money{1k} + Money{400} <-> 1400.0
+[x] Money{1k} + Money{400} == Money{1k + 400}
 
-[ ] Money{3} - Money{2} == Money{1}
+[x] Money{x} - Money{y} == Money{x-y} (x >= y)
+[x] Money{x} - Money{x} == Money.Zero
 
 
 [x] Money{x} * 0 == Money{0} 
@@ -41,10 +44,10 @@
 [x] Money{5} * 2 == Money{10}
 [x] Money{1} + Money{2} == Money{3}
 [x] Money{x} + Money{x} <-> Money{x} * 2
-[ ] Money{1k + 400} * 2 <-> Money{1k} * 2 + Money{400} * 2 == Money{2k + 800}
+[x] Money{1k + 400} * 2 <-> Money{1k} * 2 + Money{400} * 2 == Money{2k + 800}
  
+[x] Money{1k + 600} * 2 == Money{3k + 200}
+[ ] Factorization
 [ ] Money{1k + 600} * 2 != Money{2k + 1200}
-[ ] Money{1k + 600} * 2 == Money{3k + 200}
 
 [ ] Roundings
-[ ] Factorization

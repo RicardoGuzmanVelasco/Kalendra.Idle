@@ -39,7 +39,7 @@ namespace Kalendra.Idle.Tests.Editor
         }
         #endregion
 
-        #region Arithmetics (+ and *)
+        #region Arithmetics (+, - and *)
         [Test]
         public void Money_AddingOperator_ReturnsMoney()
         {
@@ -100,6 +100,60 @@ namespace Kalendra.Idle.Tests.Editor
             
             result.Should().Be(Money.From(multipland));
         }
+
+        [Test]
+        public void Money_Adding_ReturnsSameReduction()
+        {
+            var sut = Money.From(1000) + Money.From(400);
+
+            var result = sut.Reduce();
+
+            result.Should().BeApproximately(Money.From(1400).Reduce(), double.Epsilon);
+        }
+
+        [Test, TestCase(3, 2), TestCase(2e15, 17e11)]
+        public void Money_Substract_SameAsReductionsSubstraction(double m1, double m2)
+        {
+            var sut1 = Money.From(m1);
+            var sut2 = Money.From(m2);
+
+            var result = sut1 - sut2;
+
+            result.Should().Be(Money.From(m1 - m2));
+        }
+
+        [Test, TestCase(0), TestCase(1), TestCase(87e9)]
+        public void Money_SubstractSame_IsMoneyZero(double m)
+        {
+            var sut = Money.From(m);
+
+            var result = sut - sut;
+
+            result.Should().Be(Money.Zero);
+        }
+
+        [Test]
+        public void Money_AdditionAndMultiply_Precedence()
+        {
+            var expected = (Money.From(1000) + Money.From(600)) * 2;
+            
+            var sut = Money.From(1000) + Money.From(600);
+            sut *= 2;
+
+            sut.Should().Be(expected);
+            sut.Should().Be(Money.From(3200));
+        }
+
+        [Test]
+        public void Money_Arithmetics_Association()
+        {
+            var expected = Money.From(1400) * 2;
+
+            var sut = Money.From(1000) * 2 + Money.From(400) * 2;
+
+            sut.Should().Be(expected);
+            sut.Should().Be(Money.From(2800));
+        }
         #endregion
         
         #region Equality
@@ -130,6 +184,16 @@ namespace Kalendra.Idle.Tests.Editor
             var sut = Money.From(0);
 
             var result = sut == Money.Zero;
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Money_Arithmethic_Equality()
+        {
+            var sut = Money.From(1000) + Money.From(400);
+
+            var result = sut == Money.From(1400);
 
             result.Should().BeTrue();
         }
