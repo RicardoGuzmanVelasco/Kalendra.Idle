@@ -3,7 +3,7 @@
 [x] Money.Zero
 [x] Money private constructor
 [x] Money ignore decimals
-[ ] Money factors are private
+[x] Money factors are private
 [ ] Money has never negative factors
 [ ] Money creates factors on the fly
 

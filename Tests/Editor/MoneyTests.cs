@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Kalendra.Idle.Runtime;
 using NUnit.Framework;
@@ -6,6 +7,17 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
+        #region Preconditions
+        [Test]
+        public void Money_FromNegative_ThrowsException()
+        {
+            Action act = () => Money.From(-1);
+
+            act.Should().Throw<Exception>();
+        }
+        #endregion
+        
+        #region Reduction to double
         [Theory, TestCase(0), TestCase(50 + 20000 + 2e10)]
         public void Money_Reduces_ToDouble(double source)
         {
@@ -25,7 +37,9 @@ namespace Kalendra.Idle.Tests.Editor
 
             result.Should().Be((int)source);
         }
+        #endregion
 
+        #region Arithmetics (+ and *)
         [Test]
         public void Money_AddingOperator_ReturnsMoney()
         {
@@ -86,7 +100,9 @@ namespace Kalendra.Idle.Tests.Editor
             
             result.Should().Be(Money.From(multipland));
         }
-
+        #endregion
+        
+        #region Equality
         [Test]
         public void Money_Ignore_Decimals()
         {
@@ -117,5 +133,6 @@ namespace Kalendra.Idle.Tests.Editor
 
             result.Should().BeTrue();
         }
+        #endregion
     }
 }

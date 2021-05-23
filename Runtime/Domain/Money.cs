@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +10,9 @@ namespace Kalendra.Idle.Runtime
         
         Money(double amount)
         {
+            if(amount < 0)
+                throw new ArgumentOutOfRangeException();
+            
             factors = new Dictionary<string, int>();
             Factorize(amount);
         }
@@ -74,7 +76,8 @@ namespace Kalendra.Idle.Runtime
 
             Prefix(string symbol)
             {
-                Debug.Assert(Symbols.Contains(symbol));
+                if(!Symbols.Contains(symbol))
+                    throw new ArgumentException();
                 
                 this.symbol = symbol;
                 
