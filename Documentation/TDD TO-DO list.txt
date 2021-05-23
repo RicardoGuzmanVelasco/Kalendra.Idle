@@ -5,13 +5,11 @@
 [x] Money ignore decimals
 [x] Money factors are private
 [x] Money has never negative factors
+[x] Money is comparable
+[x] Prefix are comparable
 
 [ ] Money creates factors on the fly
 [ ] Money.From(double.MaxValue) does not fail
-
-[ ] Money{1k}.MaxPrefix == "k"
-[ ] Money{999}.MaxPrefix == ""
-[ ] Money{1B + 1k}.MaxPrefix == "B"
 
 [ ] Money{1k}.ToString() == "1k"
 [ ] Money{1k + 400}.ToString() == "1.4k"
@@ -50,4 +48,10 @@
 [x] Money{1k}.Factor() == [Money{1k}]
 [x] Money{20M + 2k}.Factor() == [Money{20M}, Money{2k}]
 
-[-] Roundings
+[x] Money.Zero.Round == Money.Zero
+[x] Money{1k}.Round == Money{1k}
+[x] Money{1k + 809}.Round == Money{1k}
+[x] Money{45M + 7}.Round == Money{45M}
+
+
+[x] Factory method with prefix

@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Kalendra.Idle.Runtime
 {
-    public readonly struct Money : IEquatable<Money>
+    public readonly struct Money : IEquatable<Money>, IComparable<Money>, IComparable
     {
         readonly Dictionary<string, int> factors;
 
         #region Constructors
-        Money(int amount, string prefixSymbol) : this(Prefix.From(prefixSymbol) * amount) { }
+        Money(double amount, string prefixSymbol) : this(amount * Prefix.From(prefixSymbol)) { }
         
         Money(double amount)
         {
@@ -51,12 +51,20 @@ namespace Kalendra.Idle.Runtime
             return resultFactors;
         }
 
+        public Money Round()
+        {
+            if(!factors.Any())
+                return Zero;
+            
+            var maxPrefix = factors.Max(p => Prefix.From(p.Key));
+            return new Money(maxPrefix * factors[maxPrefix]);
+        }
+
         #region Factory Methods/Properties
         public static Money Zero => From(0);
         
         public static Money From(double reduction) => new Money(reduction);
-
-        public static Money From(int amount, string symbol) => new Money(amount, symbol);
+        public static Money From(double amount, string symbol) => new Money(amount, symbol);
         #endregion
 
         #region Operator overloading
@@ -76,13 +84,16 @@ namespace Kalendra.Idle.Runtime
         }
         #endregion
         
-        #region Equality
+        #region Equality/Comparation
         public bool Equals(Money other) => other.Reduce().Equals(Reduce());
         public override bool Equals(object other) => other is Money o && Equals(o);
         public override int GetHashCode() => Reduce().GetHashCode();
 
         public static bool operator ==(Money m1, Money m2) => m1.Equals(m2);
         public static bool operator !=(Money m1, Money m2) => !(m1 == m2);
+        
+        public int CompareTo(Money other) => Reduce().CompareTo(other.Reduce());
+        public int CompareTo(object other) => Reduce().CompareTo(other);
         #endregion
 
         #region Formatting members
@@ -90,7 +101,7 @@ namespace Kalendra.Idle.Runtime
         #endregion
 
         #region Prefixes management
-        readonly struct Prefix
+        readonly struct Prefix : IEquatable<Prefix>, IComparable<Prefix>, IComparable
         {
             readonly string symbol;
             readonly int base10;
@@ -134,6 +145,9 @@ namespace Kalendra.Idle.Runtime
             
             public static bool operator ==(Prefix p1, Prefix p2) => p1.Equals(p2);
             public static bool operator !=(Prefix p1, Prefix p2) => !(p1 == p2);
+
+            public int CompareTo(Prefix other) => base10.CompareTo(other.base10);
+            public int CompareTo(object other) => base10.CompareTo(other);
             #endregion
 
             #region Formatting members

@@ -222,5 +222,47 @@ namespace Kalendra.Idle.Tests.Editor
             result.Should().Be(sut);
         }
         #endregion
+        
+        #region Rounding
+        [Test]
+        public void Round_MoneyZero_IsMoneyZero()
+        {
+            var sut = Money.Zero;
+
+            var result = sut.Round();
+
+            result.Should().Be(Money.Zero);
+        }
+        
+        [Test, TestCase(1e3), TestCase(700e18)]
+        public void Round_OneFactorMoney_IsSameMoney(double oneFactor)
+        {
+            var sut = Money.From(oneFactor);
+
+            var result = sut.Round();
+
+            result.Should().Be(sut);
+        }
+        
+        [Test]
+        public void Round_MoneyWithOnlyTwoAdjacentFactors_PurguesSmallestFactor()
+        {
+            var sut = Money.From(1000) + Money.From(809);
+
+            var result = sut.Round();
+
+            result.Should().Be(Money.From(1000));
+        }
+
+        [Test]
+        public void Round_MoneyWithNonAdjacentFactors_PurguesSmallestFactors()
+        {
+            var sut = Money.From(45e6) + Money.From(7);
+
+            var result = sut.Round();
+
+            result.Should().Be(Money.From(45e6));
+        }
+        #endregion
     }
 }
