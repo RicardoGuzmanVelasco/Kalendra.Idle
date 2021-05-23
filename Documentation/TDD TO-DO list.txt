@@ -2,6 +2,8 @@
 [x] Money is struct
 [x] Money.Zero
 [ ] Money.ToString()
+[x] Money private constructor
+[ ] Money ignore decimals
 
 [x] Money{1} <-> 1.0
  

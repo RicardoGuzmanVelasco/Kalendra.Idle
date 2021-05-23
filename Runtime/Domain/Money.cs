@@ -4,10 +4,7 @@ namespace Kalendra.Idle.Runtime
     {
         readonly double value;
         
-        public Money(int amount)
-        {
-            value = amount;
-        }
+        Money(int amount) => value = amount;
 
         public double Reduce()
         {

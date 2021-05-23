@@ -9,7 +9,7 @@ namespace Kalendra.Idle.Tests.Editor
         [Theory, TestCase(0), TestCase(2)]
         public void Money_Reduces_ToDouble(double source)
         {
-            var sut = new Money((int)source);
+            var sut = Money.From(source);
 
             var result = sut.Reduce();
 
