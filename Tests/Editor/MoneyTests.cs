@@ -6,7 +6,7 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
-        [Theory, TestCase(0), TestCase(2)]
+        [Theory, TestCase(0), TestCase(1400)]
         public void Money_Reduces_ToDouble(double source)
         {
             var sut = Money.From(source);
@@ -16,14 +16,14 @@ namespace Kalendra.Idle.Tests.Editor
             result.Should().Be(source);
         }
 
-        [Test]
-        public void Money_FromDouble_ReducesToDouble()
+        [Test, TestCase(1.0), TestCase(2.1)]
+        public void Money_FromDouble_ReducesToDouble(double source)
         {
-            var sut = Money.From(1.0);
+            var sut = Money.From(source);
 
             var result = sut.Reduce();
 
-            result.Should().Be(1.0);
+            result.Should().Be((int)source);
         }
 
         [Test]
@@ -68,13 +68,23 @@ namespace Kalendra.Idle.Tests.Editor
         }
         
         [Theory, TestCase(0), TestCase(2), TestCase(5)]
-        public void MoneyZero_MultiplyByAnything_IsZero(double factor)
+        public void MoneyZero_AbsorbingElement(double factor)
         {
             var sut = Money.Zero;
 
             var result = sut * factor;
             
             result.Should().Be(Money.Zero);
+        }
+        
+        [Theory, TestCase(0), TestCase(2), TestCase(5)]
+        public void MoneyZero_IdentityElement(int multipland)
+        {
+            var sut = Money.Zero;
+
+            var result = sut + Money.From(multipland);
+            
+            result.Should().Be(Money.From(multipland));
         }
 
         [Test]
@@ -88,13 +98,34 @@ namespace Kalendra.Idle.Tests.Editor
         }
 
         [Test]
-        public void Money_GroupBy_Prefixes()
+        public void Money_Equality()
         {
-            var sut = Money.From(1400);
+            var sut1 = Money.From(1);
+            var sut2 = Money.From(1);
+
+            var result = sut1 == sut2;
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Money_Equality_ToZero()
+        {
+            var sut = Money.From(0);
+
+            var result = sut == Money.Zero;
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void METHOD()
+        {
+            var sut = Money.From(10);
 
             var result = sut.Factors;
 
-            result.Should().HaveCount(2);
+            result.Should().HaveCount(1);
         }
     }
 }
