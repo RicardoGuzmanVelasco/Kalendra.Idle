@@ -24,6 +24,11 @@ namespace Kalendra.Idle.Runtime
         {
             return From(m1.Reduce() + m2.Reduce());
         }
+        
+        public static Money operator *(Money m, double factor)
+        {
+            return From(m.Reduce() * factor);
+        }
         #endregion
 
         #region Formatting members

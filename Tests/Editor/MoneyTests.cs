@@ -6,14 +6,14 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
-        [Test, TestCase(0), TestCase(2)]
-        public void Money_Reduces_ToDouble(double reduction)
+        [Theory, TestCase(0), TestCase(2)]
+        public void Money_Reduces_ToDouble(double source)
         {
-            var sut = new Money((int)reduction);
+            var sut = new Money((int)source);
 
             var result = sut.Reduce();
 
-            result.Should().Be(reduction);
+            result.Should().Be(source);
         }
 
         [Test]
@@ -35,6 +35,24 @@ namespace Kalendra.Idle.Tests.Editor
             var result = sut1 + sut2;
 
             result.Should().Be(Money.From(3));
+        }
+
+        [Test]
+        public void Money_MultiplyByNumber_ReturnsMoney()
+        {
+            var sut = Money.From(5);
+
+            var result = sut * 2;
+
+            result.Should().Be(Money.From(10));
+        }
+
+        [Theory, TestCase(0), TestCase(2), TestCase(5)]
+        public void Money_AddingTwice_EqualsMultiplyBy2(double source)
+        {
+            var sut = Money.From(source);
+
+            (sut + sut).Should().Be(sut * 2);
         }
     }
 }
