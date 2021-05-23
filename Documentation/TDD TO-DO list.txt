@@ -1,0 +1,12 @@
+Money{1} <-> 1d
+
+Money{1k + 400} == 1400d
+Money{1k} + Money{400} == Money{1k + 400}
+
+Money{5} * 2 == Money{10}
+Money{1} + Money{2} == Money{3}
+Money{x} + Money{x} <-> Money{x} * 2
+Money{1k + 400} * 2 <-> Money{1k} * 2 + Money{400} * 2 == Money{2k + 800}
+
+Money{1k + 600} * 2 != Money{2k + 1200}
+Money{1k + 600} * 2 == Money{3k + 200}
