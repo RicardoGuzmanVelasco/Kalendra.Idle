@@ -5,6 +5,7 @@
 [x] Money ignore decimals
 [ ] Money factors are private
 [ ] Money has never negative factors
+[ ] Money creates factors on the fly
 
 [ ] Money{1k}.ToString() == "1k"
 [ ] Money{1k + 400}.ToString() == "1.4k"
@@ -15,6 +16,8 @@
 [ ] Money{100k + 500}.ToString() == "100k"
 [ ] Money{100k + 500}.ToString() == Money{100k}.ToString()
 [ ] Money.From("10k") == Money{10k}
+
+[x] Money.From(1500) == 1500
 
 [x] Money{1} <-> 1.0
 
@@ -29,9 +32,12 @@
 
 [ ] Money{3} - Money{2} == Money{1}
 
-[-] Money.Zero + Money{x} == Money{x} (identity element)
+
 [x] Money{x} * 0 == Money{0} 
+
+[x] Money.Zero + Money{x} == Money{x} (identity element)
 [x] Money{0} * x == Money{0} (absorbing element)
+
 [x] Money{5} * 2 == Money{10}
 [x] Money{1} + Money{2} == Money{3}
 [x] Money{x} + Money{x} <-> Money{x} * 2

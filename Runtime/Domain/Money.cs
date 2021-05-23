@@ -21,7 +21,7 @@ namespace Kalendra.Idle.Runtime
             if(amount < 1)
                 return;
             
-            var closestPrefix = Prefixes.ClosestTo(amount);
+            var closestPrefix = Prefixes.ClosestLowerThan(amount);
             factors[closestPrefix] = Prefixes.ToUnits(amount, closestPrefix);
             
             Factor(amount - Reduce());
@@ -31,9 +31,8 @@ namespace Kalendra.Idle.Runtime
         {
             if(!factors.Any())
                 return 0;
-            
-            var factor = factors.First();
-            return Prefixes.FromUnits(factor.Value, factor.Key);
+
+            return factors.Sum(factor => Prefixes.ToNumber(factor.Key) * factor.Value);
         }
 
         #region Factory Methods/Properties
@@ -70,36 +69,47 @@ namespace Kalendra.Idle.Runtime
         #region Prefixes management
         static class Prefixes
         {
-            public static string ClosestTo(double number)
+            static IEnumerable<string> OrderedPrefixes
             {
-                if(number < 1000)
-                    return "";
-                return "k";
+                get
+                {
+                    yield return "";
+                    yield return "k";
+                    yield return "M";
+                    yield return "B";
+                    yield return "T";
+                    yield return "aa";
+                    yield return "ab";
+                    yield return "ac";
+                    yield return "ad";
+                }
+            }
+            
+            internal static string ClosestLowerThan(double number)
+            {
+                var lastPrefix = "";
+                foreach(var prefix in OrderedPrefixes)
+                    if(ToNumber(prefix) > number)
+                        return lastPrefix;
+                    else
+                        lastPrefix = prefix;
+
+                throw new ArgumentOutOfRangeException();
             }
 
-            public static int ToUnits(double amount, string prefix)
+            internal static int ToUnits(double amount, string prefix)
             {
                 Debug.Assert(amount / ToNumber(prefix) <= int.MaxValue);
 
                 return (int) (amount / ToNumber(prefix));
             }
 
-            public static double FromUnits(int amount, string prefix)
+            internal static double ToNumber(string prefix)
             {
-                return amount * ToNumber(prefix);
-            }
+                Debug.Assert(OrderedPrefixes.Contains(prefix));
 
-            static double ToNumber(string prefix)
-            {
-                switch(prefix.ToLower())
-                {
-                    case "":
-                        return 1;
-                    case "k":
-                        return 1000;
-                }
-
-                throw new NotSupportedException();
+                var prefixes = OrderedPrefixes.TakeWhile(p => p != prefix);
+                return Math.Pow(10, prefixes.Count() * 3);
             }
         }
         #endregion

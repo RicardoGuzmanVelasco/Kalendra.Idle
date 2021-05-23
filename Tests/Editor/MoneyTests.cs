@@ -6,7 +6,7 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
-        [Theory, TestCase(0), TestCase(1400)]
+        [Theory, TestCase(0), TestCase(1500)]
         public void Money_Reduces_ToDouble(double source)
         {
             var sut = Money.From(source);
@@ -116,16 +116,6 @@ namespace Kalendra.Idle.Tests.Editor
             var result = sut == Money.Zero;
 
             result.Should().BeTrue();
-        }
-
-        [Test]
-        public void METHOD()
-        {
-            var sut = Money.From(10);
-
-            var result = sut.Factors;
-
-            result.Should().HaveCount(1);
         }
     }
 }
