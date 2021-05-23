@@ -76,5 +76,25 @@ namespace Kalendra.Idle.Tests.Editor
             
             result.Should().Be(Money.Zero);
         }
+
+        [Test]
+        public void Money_Ignore_Decimals()
+        {
+            var sut = Money.From(0.1f);
+
+            var result = sut.Reduce();
+
+            result.Should().Be(0);
+        }
+
+        [Test]
+        public void Money_GroupBy_Prefixes()
+        {
+            var sut = Money.From(1400);
+
+            var result = sut.Factors;
+
+            result.Should().HaveCount(2);
+        }
     }
 }

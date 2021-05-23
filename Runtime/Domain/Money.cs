@@ -1,10 +1,17 @@
+using System.Collections.Generic;
+
 namespace Kalendra.Idle.Runtime
 {
     public struct Money
     {
         readonly double value;
+        public IReadOnlyDictionary<string, int> Factors { get; }
         
-        Money(int amount) => value = amount;
+        Money(int amount)
+        {
+            value = amount;
+            Factors = new Dictionary<string, int>();
+        }
 
         public double Reduce()
         {
@@ -30,6 +37,12 @@ namespace Kalendra.Idle.Runtime
         {
             return From(m.Reduce() * factor);
         }
+        #endregion
+        
+        #region Equality
+        public bool Equals(Money other) => Reduce().Equals(other.Reduce());
+        public override bool Equals(object other) => other is Money o && Equals(o);
+        public override int GetHashCode() => Reduce().GetHashCode();
         #endregion
 
         #region Formatting members

@@ -1,9 +1,16 @@
 [x] Money is value object
 [x] Money is struct
 [x] Money.Zero
-[ ] Money.ToString()
 [x] Money private constructor
-[ ] Money ignore decimals
+[x] Money ignore decimals
+
+[ ] Money{1k}.ToString() == "1k"
+[ ] Money{1k + 400}.ToString() == "1.4k"
+[ ] Money{1k + 450}.ToString() == "1.45k"
+[ ] Money{1k + 405}.ToString() == "1.4k"
+[ ] Money{100k}.ToString() == "100k"
+[ ] Money{100k + 500}.ToString() == "100k"
+[ ] Money{100k + 500}.ToString() == "100k"
 
 [x] Money{1} <-> 1.0
  
