@@ -257,7 +257,7 @@ namespace Kalendra.Idle.Tests.Editor
         [Test]
         public void Round_MoneyWithNonAdjacentFactors_PurguesSmallestFactors()
         {
-            var sut = Money.From(45e6) + Money.From(7);
+            var sut = Money.From(45e6) + Money.From(23e3) + Money.From(7);
 
             var result = sut.Round();
 

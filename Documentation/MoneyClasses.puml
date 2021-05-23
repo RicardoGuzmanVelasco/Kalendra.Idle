@@ -1,0 +1,65 @@
+@startuml
+
+package System
+{
+    interface IEquatable<T>
+    {
+        +Equals(other: T): bool
+    }
+    interface IComparable
+    {
+        +CompareTo(other: object): int
+    }
+    interface IComparable<T>
+    {
+        +CompareTo(other: T): int
+    }
+}
+
+-class Prefix <<(V,orchid) struct, ValueObject>>
+{
+    -{static} Symbols: IEnumerable<string> {get} \n ["", "k", "M", "B", "T", "aa", "ab"...]
+
+    -symbol: string
+    -base10: int
+    
+    -Prefix(symbol: string)
+    +From(symbol: string): Prefix
+    +ClosestLowerThan(number: double): Prefix
+    
+    +{static} implicit double(p: Prefix): double
+    +{static} implicit string(p: Prefix): string
+    
+    +{static}operator==(p1: Prefix, p2: Prefix): Prefix
+    +{static}operator!=(p1: Prefix, p2: Prefix): Prefix
+}
+Prefix --|> IEquatable
+Prefix --|> IComparable
+
++class Money <<(V,orchid) struct, ValueObject>>
+{
+    +{static} Zero: Money {get}
+    
+    -factors: Dictionary<string, int>
+    
+    -Money(amount: double, prefixSymbol: string)
+    -Money(amount: double)
+    -Factorize(amount: double)   
+    +{static} From(reduction: double): Money
+    +{static} From(reduction: double, symbol: string): Money
+    
+    +Reduce(): double
+    +Factorize(): IReadOnlyCollection<Money>
+    +Round(): Money
+    
+    +{static}operator+(m1: Money, m2: Money): Money
+    +{static}operator-(m1: Money, m2: Money): Money
+    +{static}operator*(m1: Money, factor: double): Money
+    
+    +{static}operator==(m1: Money, m2: Money): Money
+    +{static}operator!=(m1: Money, m2: Money): Money
+}
+Money --|> IEquatable
+Money --|> IComparable
+Money +-- Prefix
+@enduml

@@ -64,7 +64,7 @@ namespace Kalendra.Idle.Runtime
         public static Money Zero => From(0);
         
         public static Money From(double reduction) => new Money(reduction);
-        public static Money From(double amount, string symbol) => new Money(amount, symbol);
+        public static Money From(double reduction, string symbol) => new Money(reduction, symbol);
         #endregion
 
         #region Operator overloading
@@ -124,8 +124,8 @@ namespace Kalendra.Idle.Runtime
             {
                 var lastPrefix = "";
                 foreach(var symbol in Symbols)
-                    if(Prefix.From(symbol) > number)
-                        return Prefix.From(lastPrefix);
+                    if(From(symbol) > number)
+                        return From(lastPrefix);
                     else
                         lastPrefix = symbol;
 
