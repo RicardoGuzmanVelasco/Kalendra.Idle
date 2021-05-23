@@ -1,6 +1,6 @@
 namespace Kalendra.Idle.Runtime
 {
-    public class Money
+    public struct Money
     {
         readonly double value;
         
@@ -18,5 +18,16 @@ namespace Kalendra.Idle.Runtime
         {
             return new Money((int)reduction);
         }
+
+        #region Operator overloading
+        public static Money operator +(Money m1, Money m2)
+        {
+            return From(m1.Reduce() + m2.Reduce());
+        }
+        #endregion
+
+        #region Formatting members
+        public override string ToString() => $"[{value}]";
+        #endregion
     }
 }

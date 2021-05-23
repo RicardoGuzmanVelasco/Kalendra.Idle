@@ -25,5 +25,16 @@ namespace Kalendra.Idle.Tests.Editor
 
             result.Should().Be(1.0);
         }
+
+        [Test]
+        public void Money_AddingOperator_ReturnsMoney()
+        {
+            var sut1 = Money.From(1);
+            var sut2 = Money.From(2);
+
+            var result = sut1 + sut2;
+
+            result.Should().Be(Money.From(3));
+        }
     }
 }
