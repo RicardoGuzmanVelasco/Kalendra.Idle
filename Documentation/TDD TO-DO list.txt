@@ -65,6 +65,7 @@
 [x] Money.From(1, "b") --> NotSupportedException
 
 [x] Money{-x} --> ArgumentOutOfIndexException
-[ ] Money{1} - Money {2} --> InvalidOperationException
-[ ] Money{1} * -x --> InvalidOperationException
+[x] Money{1} - Money {2} --> InvalidOperationException
+[x] Money{1} * -x --> InvalidOperationException
+[x] Money.Zero * -x --> Money.Zero
 

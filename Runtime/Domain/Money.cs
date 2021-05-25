@@ -75,11 +75,17 @@ namespace Kalendra.Idle.Runtime
         
         public static Money operator -(Money m1, Money m2)
         {
+            if(m2 > m1)
+                throw new InvalidOperationException($"Cannot substract a greater money: {m1} < {m2}");
+            
             return From(m1.Reduce() - m2.Reduce());
         }
         
         public static Money operator *(Money m, double factor)
         {
+            if(factor < 0 && m > Zero)
+                throw new InvalidOperationException($"Cannot multiply positive money by negative factor: {factor}");
+            
             return From(m.Reduce() * factor);
         }
         #endregion
@@ -94,6 +100,11 @@ namespace Kalendra.Idle.Runtime
         
         public int CompareTo(Money other) => Reduce().CompareTo(other.Reduce());
         public int CompareTo(object other) => Reduce().CompareTo(other);
+
+        public static bool operator >(Money m1, Money m2) => m1.Reduce() > m2.Reduce();
+        public static bool operator <(Money m1, Money m2) => !(m1 > m2 || m1 == m2);
+        public static bool operator >=(Money m1, Money m2) => !(m1 < m2);
+        public static bool operator <=(Money m1, Money m2) => !(m1 > m2);
         #endregion
 
         #region Formatting members

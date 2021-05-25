@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Kalendra.Idle.Runtime;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Kalendra.Idle.Tests.Editor
 {
@@ -179,6 +180,37 @@ namespace Kalendra.Idle.Tests.Editor
 
             sut.Should().Be(expected);
             sut.Should().Be(Money.From(2800));
+        }
+
+        [Test]
+        public void Money_SubstractGreater_ThrowsException()
+        {
+            var sut1 = Money.From(1);
+            var sut2 = Money.From(2);
+
+            Money result;
+            Action act = () => result = sut1 - sut2;
+
+            act.Should().Throw<InvalidOperationException>();
+        }
+
+        [Test]
+        public void MoneyNotZero_MultiplyByNegative_ThrowsException()
+        {
+            var sut = Money.From(1);
+
+            Money result;
+            Action act = () => result = sut * -1;
+
+            act.Should().Throw<InvalidOperationException>();
+        }
+
+        [Test]
+        public void MoneyZero_MultiplyByNegative_IsMoneyZero()
+        {
+            var result = Money.Zero * -1;
+
+            result.Should().Be(Money.Zero);
         }
         #endregion
         
