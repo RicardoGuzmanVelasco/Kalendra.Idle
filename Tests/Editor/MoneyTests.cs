@@ -8,13 +8,27 @@ namespace Kalendra.Idle.Tests.Editor
 {
     public class MoneyTests
     {
-        #region Preconditions
+        #region Construction/Preconditions
         [Test]
         public void Money_FromNegative_ThrowsException()
         {
             Action act = () => Money.From(-1);
 
-            act.Should().Throw<Exception>();
+            act.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Test]
+        [TestCase(1, "k", 1e3)]
+        [TestCase(9, "", 9)]
+        [TestCase(3.54, "M", 3e6+540e3)]
+        [TestCase(8.66, "", 8)]
+        public void Money_FromPrefix(double reductionSource, string prefix, double reductionExpected)
+        {
+            var sut = Money.From(reductionSource, prefix);
+
+            var result = sut.Reduce();
+
+            result.Should().Be(reductionExpected);
         }
         #endregion
         

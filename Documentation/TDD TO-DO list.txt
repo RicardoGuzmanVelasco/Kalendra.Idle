@@ -52,6 +52,16 @@
 [x] Money{1k}.Round == Money{1k}
 [x] Money{1k + 809}.Round == Money{1k}
 [x] Money{45M + 7}.Round == Money{45M}
-
+[ ] Set to 2 factors rounding?
 
 [x] Factory method with prefix
+[x] Money.From(1, "k") == Money{1k}
+[x] Money.From(9, "") == Money{9}
+[x] Money.From(3.54, "M") == Money{3M + 540k}
+[x] Money.From(8.66, "") == Money{8}
+
+[ ] Money.From(1, "x") --> NotSupportedException
+[x] Money{-x} --> ArgumentOutOfIndexException
+[ ] Money{1} - Money {2} --> InvalidOperationException
+[ ] Money{1} * -x --> InvalidOperationException
+
