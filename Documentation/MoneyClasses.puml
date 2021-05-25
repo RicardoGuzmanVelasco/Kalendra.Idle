@@ -30,8 +30,8 @@ package System
     +{static} implicit double(p: Prefix): double
     +{static} implicit string(p: Prefix): string
     
-    +{static}operator==(p1: Prefix, p2: Prefix): Prefix
-    +{static}operator!=(p1: Prefix, p2: Prefix): Prefix
+    +{static}operator == (p1: Prefix, p2: Prefix): Prefix
+    +{static}operator != (p1: Prefix, p2: Prefix): Prefix
 }
 Prefix --|> IEquatable
 Prefix --|> IComparable
@@ -52,12 +52,16 @@ Prefix --|> IComparable
     +Factorize(): IReadOnlyCollection<Money>
     +Round(): Money
     
-    +{static}operator+(m1: Money, m2: Money): Money
-    +{static}operator-(m1: Money, m2: Money): Money
-    +{static}operator*(m1: Money, factor: double): Money
-    
-    +{static}operator==(m1: Money, m2: Money): Money
-    +{static}operator!=(m1: Money, m2: Money): Money
+    +{static}operator + (m1: Money, m2: Money): Money
+    +{static}operator - (m1: Money, m2: Money): Money
+    +{static}operator * (m1: Money, factor: double): Money
+
+    +{static}operator == (m1: Money, m2: Money): Money
+    +{static}operator != (m1: Money, m2: Money): Money
+    +{static}operator > (m1: Money, m2: Money): Money
+    +{static}operator < (m1: Money, m2: Money): Money
+    +{static}operator >= (m1: Money, m2: Money): Money
+    +{static}operator <= (m1: Money, m2: Money): Money
 }
 Money --|> IEquatable
 Money --|> IComparable
