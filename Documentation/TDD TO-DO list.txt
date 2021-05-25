@@ -60,7 +60,10 @@
 [x] Money.From(3.54, "M") == Money{3M + 540k}
 [x] Money.From(8.66, "") == Money{8}
 
-[ ] Money.From(1, "x") --> NotSupportedException
+[x] Money.From(1, " ") --> NotSupportedException
+[x] Money.From(1, "x") --> NotSupportedException
+[x] Money.From(1, "b") --> NotSupportedException
+
 [x] Money{-x} --> ArgumentOutOfIndexException
 [ ] Money{1} - Money {2} --> InvalidOperationException
 [ ] Money{1} * -x --> InvalidOperationException

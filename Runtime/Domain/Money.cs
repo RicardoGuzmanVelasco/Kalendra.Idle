@@ -109,7 +109,7 @@ namespace Kalendra.Idle.Runtime
             Prefix(string symbol)
             {
                 if(!Symbols.Contains(symbol))
-                    throw new ArgumentException();
+                    throw new ArgumentException($"Unknown prefix: {symbol}", nameof(symbol));
                 
                 this.symbol = symbol;
                 

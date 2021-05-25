@@ -30,6 +30,17 @@ namespace Kalendra.Idle.Tests.Editor
 
             result.Should().Be(reductionExpected);
         }
+
+        [Test]
+        [TestCase(" ")]
+        [TestCase("x")]
+        [TestCase("b")]
+        public void Money_FromWrongPrefix_ThrowsException(string wrongPrefix)
+        {
+            Action act = () => Money.From(1, wrongPrefix);
+
+            act.Should().Throw<ArgumentException>();
+        }
         #endregion
         
         #region Reduction to double
