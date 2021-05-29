@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Kalendra.Idle.Runtime;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Kalendra.Idle.Tests.Editor
 {
@@ -41,6 +40,71 @@ namespace Kalendra.Idle.Tests.Editor
             Action act = () => Money.From(1, wrongPrefix);
 
             act.Should().Throw<ArgumentException>();
+        }
+        #endregion
+        
+        #region ToString/Serialization
+        [Test]
+        [TestCase(1000, "1k")]
+        [TestCase(1400, "1.4k")]
+        [TestCase(1405, "1.4k")]
+        [TestCase(1450, "1.45k")]
+        [TestCase(100000, "100k")]
+        [TestCase(100999, "100k")]
+        public void Serialization_ParsesAMaxOf3Digits_AndPrefixSymbol(double reduction, string expected)
+        {
+            var sut = Money.From(reduction);
+
+            var result = sut.ToString();
+
+            result.Should().Be(expected);
+        }
+
+        [Test]
+        [TestCase("v")]
+        [TestCase("-")]
+        [TestCase("m")]
+        [TestCase(".")]
+        public void Deserialization_FromWrongPrefix_ThrowsException(string wrongPrefix)
+        {
+            Action act = () => Money.From("1.4" + wrongPrefix);
+
+            act.Should().Throw<ArgumentException>();
+        }
+        
+        [Test]
+        [TestCase("")]
+        [TestCase("1.1.1")]
+        [TestCase("1,1,1")]
+        [TestCase("1.1,1")]
+        [TestCase("1b1")]
+        [TestCase("1.1b1")]
+        public void Deserialization_FromWrongNumber_ThrowsException(string wrongNumberPart)
+        {
+            Action act = () => Money.From(wrongNumberPart + "k");
+
+            act.Should().Throw<FormatException>();
+        }
+
+        [Test]
+        public void Deserialization_FromEmpty_ThrowsException()
+        {
+            Action act = () => Money.From("");
+
+            act.Should().Throw<FormatException>();
+        }
+
+        [Test]
+        [TestCase("1.3k", 1300)]
+        [TestCase("6", 6)]
+        [TestCase("2M", 2e6)]
+        public void Deserialization_FromCorrectFormat_GeneratesCorrectMoney(string correctFormat, double expected)
+        {
+            var expectedResult = Money.From(expected);
+            
+            var sut = Money.From(correctFormat);
+
+            sut.Should().Be(expectedResult);
         }
         #endregion
         

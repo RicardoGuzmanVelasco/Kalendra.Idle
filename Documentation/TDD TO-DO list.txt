@@ -8,18 +8,26 @@
 [x] Money is comparable
 [x] Prefix are comparable
 
-[ ] Money creates factors on the fly
-[ ] Money.From(double.MaxValue) does not fail
+[?] Money creates factors on the fly
+[/] Money.From(double.MaxValue) does not fail
+[ ] Symbols are not extensively defined
+[?] NextSymbol
+[?] PrevSymbol
+[ ] SymbolBase10
 
-[ ] Money{1k}.ToString() == "1k"
-[ ] Money{1k + 400}.ToString() == "1.4k"
-[ ] Money{1k + 450}.ToString() == "1.45k"
-[ ] Money{1k + 405}.ToString() == "1.4k"
-[ ] Money{100k}.ToString() == "100k"
-[ ] Money{100k + 500}.ToString() == "100k"
-[ ] Money{100k + 500}.ToString() == "100k"
-[ ] Money{100k + 500}.ToString() == Money{100k}.ToString()
-[ ] Money.From("10k") == Money{10k}
+[x] Money{1k}.ToString() == "1k"
+[x] Money{1k + 400}.ToString() == "1.4k"
+[x] Money{1k + 450}.ToString() == "1.45k"
+[x] Money{1k + 405}.ToString() == "1.4k"
+[x] Money{100k}.ToString() == "100k"
+[x] Money{100k + 500}.ToString() == "100k"
+
+[x] Money.From(string) --> opposed as ToString()
+[x] Money.From(wrong prefix) --> ArgumentException
+[x] Money.From(wrong number) --> FormatException
+[x] Money.From(empty) --> FormatException
+[x] Money.From("1.3k") == Money{1.3k}
+[x] Money.From("6") == Money{6}
 
 [x] Money{1} <-> 1.0
 [x] Money{1} == Money{1}    (equality operator)
