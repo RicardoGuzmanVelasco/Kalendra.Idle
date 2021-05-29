@@ -8,23 +8,53 @@ namespace Kalendra.Idle.Runtime
     {
         static class Parser
         {
+            const int MaxSerializedDigits = 3;
+            
             public static string Serialize(Money money)
             {
-                var symbol = money.factors.Keys.Max(Prefix.From);
+                var prefix = GetMaxPrefix(money);
             
-                var number = (money.Reduce() / symbol).ToString(CultureInfo.InvariantCulture);
+                var number = ReduceNumberToPrefix(money, prefix);
+                number = LimitToMaxDigits(number);
+            
+                number = CleanTailingFloatingPoint(number);
+                number = CleanTailingFloatingZero(number);
 
-                while(number.Replace(".", "").Length > 3)
+                return number + prefix;
+            }
+
+            #region Support methods
+            static Prefix GetMaxPrefix(Money money)
+            {
+                return money.factors.Keys.Max(Prefix.From);
+            }
+
+            static string ReduceNumberToPrefix(Money money, Prefix symbol)
+            {
+                return (money.Reduce() / symbol).ToString(CultureInfo.InvariantCulture);
+            }
+
+            static string LimitToMaxDigits(string number)
+            {
+                while(number.Replace(".", "").Length > MaxSerializedDigits)
                     number = number.Remove(number.Length - 1);
-            
-                if(number.Last() == '.')
-                    number = number.Remove(number.Length - 1);
-            
+                return number;
+            }
+
+            static string CleanTailingFloatingZero(string number)
+            {
                 if(number.Contains('.') && number.Last() == '0')
                     number = number.Remove(number.Length - 1);
-
-                return number + symbol;
+                return number;
             }
+
+            static string CleanTailingFloatingPoint(string number)
+            {
+                if(number.Last() == '.')
+                    number = number.Remove(number.Length - 1);
+                return number;
+            }
+            #endregion
 
             public static Money Deserialize(string serialized)
             {

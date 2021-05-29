@@ -16,6 +16,13 @@ package System
     }
 }
 
+-class Parser <<static>>
+{
+    -{static} MaxSerializedDigits = 3 {get} <<const>>
+    +{static} Serialize(money : Money) : string
+    +{static} Deserialize(serialized : string) : Money
+}
+
 -class Prefix <<(V,orchid) struct, ValueObject>>
 {
     -{static} Symbols: IEnumerable<string> {get} \n ["", "k", "M", "B", "T", "aa", "ab"...]
@@ -66,4 +73,5 @@ Prefix --|> IComparable
 Money --|> IEquatable
 Money --|> IComparable
 Money +-- Prefix
+Money +-- Parser
 @enduml
