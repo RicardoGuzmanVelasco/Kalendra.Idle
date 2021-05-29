@@ -10,6 +10,7 @@
 
 [?] Money creates factors on the fly
 [/] Money.From(double.MaxValue) does not fail
+[/] Money.MaxValue
 [ ] Symbols are not extensively defined
 [?] NextSymbol
 [?] PrevSymbol
