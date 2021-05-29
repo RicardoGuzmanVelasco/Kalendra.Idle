@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Kalendra.Idle.Runtime
@@ -63,6 +62,7 @@ namespace Kalendra.Idle.Runtime
 
         #region Factory Methods/Properties
         public static Money Zero => From(0);
+        public static Money MaxValue => From(double.MaxValue);
         
         public static Money From(double reduction) => new Money(reduction);
         public static Money From(double reduction, string symbol) => new Money(reduction, symbol);

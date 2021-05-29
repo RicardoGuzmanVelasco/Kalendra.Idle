@@ -41,6 +41,14 @@ namespace Kalendra.Idle.Tests.Editor
 
             act.Should().Throw<ArgumentException>();
         }
+
+        [Test, Category("Slow")]
+        public void Money_MaxValue()
+        {
+            var sut = Money.From(double.MaxValue);
+
+            sut.Should().Be(Money.MaxValue);
+        }
         #endregion
         
         #region ToString/Serialization
@@ -341,6 +349,19 @@ namespace Kalendra.Idle.Tests.Editor
             var result = Money.From(sum);
 
             result.Should().Be(sut);
+        }
+
+        [Test]
+        [TestCase("", "k")]
+        [TestCase("T", "aa")]
+        [TestCase("aa", "ab")]
+        public void Factorize_AfterMultiplyBy1k_ThenNextPrefixIsFactor(string prefix, string expected)
+        {
+            var sut = Money.From(1, prefix) * 1000;
+
+            var result = sut.Factorize();
+
+            result.Should().Contain(Money.From(1, expected));
         }
         #endregion
         

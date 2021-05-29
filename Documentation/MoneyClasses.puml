@@ -23,11 +23,18 @@ package System
     +{static} Deserialize(serialized : string) : Money
 }
 
+-class PrefixSymbol <<(V,orchid) struct, ValueObject>>
+{
+    -symbol : string
+    
+    +From(symbol: string) : PrefixSymbol
+    
+    +Prev(): PrefixSymbol
+    +Next(): PrefixSymbol
+}
 -class Prefix <<(V,orchid) struct, ValueObject>>
 {
-    -{static} Symbols: IEnumerable<string> {get} \n ["", "k", "M", "B", "T", "aa", "ab"...]
-
-    -symbol: string
+    -symbol: PrefixSymbol
     -base10: int
     
     -Prefix(symbol: string)
@@ -40,6 +47,7 @@ package System
     +{static}operator == (p1: Prefix, p2: Prefix): Prefix
     +{static}operator != (p1: Prefix, p2: Prefix): Prefix
 }
+Prefix +-- PrefixSymbol : partial
 Prefix --|> IEquatable
 Prefix --|> IComparable
 
@@ -72,6 +80,6 @@ Prefix --|> IComparable
 }
 Money --|> IEquatable
 Money --|> IComparable
-Money +-- Prefix
-Money +-- Parser
+Money +-- Prefix : partial
+Money +-- Parser : partial
 @enduml
