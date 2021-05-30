@@ -34,6 +34,7 @@
 [x] Money{1T} * 1k == Money{1aa}
 [x] Money{1aa} * 1k == Money{1ab}
 [ ] Money{1az} * 1k == Money{1ba} //problem with Math.Pow(10, 90)
+[ ] Money{1zz} * 1k == Money{1aaa}
 [ ] PrefixSymbol.IndexOf --> not recursive
 
 [x] Money{1} <-> 1.0
