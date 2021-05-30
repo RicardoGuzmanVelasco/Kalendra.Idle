@@ -11,7 +11,7 @@ namespace Kalendra.Idle.Runtime
         {
             readonly struct PrefixSymbol
             {
-                static readonly List<string> FixedSymbols = new() {"", "k", "M", "B", "T"};
+                static readonly List<string> FixedSymbols = new List<string>() {"", "k", "M", "B", "T"};
 
                 readonly string symbol;
                 
