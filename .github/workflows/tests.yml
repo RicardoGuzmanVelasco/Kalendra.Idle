@@ -7,7 +7,7 @@ env:
 
 jobs:
   test:
-    name: Tests for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    name: Tests
     runs-on: ubuntu-latest
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -28,7 +28,7 @@ jobs:
         uses: MirrorNG/unity-runner@3.1.0
         with:
           # Arguments to pass to unity
-          args: -buildTarget StandaloneWindows64 -customBuildName MirrorNG -customBuildPath ./build/StandaloneWindows64 -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+          args: -buildTarget Android -customBuildName KalendraTests -customBuildPath ./build/Android -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
 
       - name: Run editor Tests
         uses: MirrorNG/unity-runner@3.1.0
@@ -46,10 +46,3 @@ jobs:
         with:
           name: Test results
           path: Tests
-
-#     - name: Publish test results
-#       uses: MirrorNG/nunit-reporter@v1.0.9
-#       if: always()
-#       with:
-#         path: "Tests/*.xml"
-#         access-token: ${{ secrets.GITHUB_TOKEN }}
